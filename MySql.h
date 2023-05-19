@@ -26,7 +26,10 @@ class MySql//:public std::exception
 public:
 
     MySql();
-
+    MySql(const MySql&) = delete;
+    MySql(MySql&& )=delete;
+    MySql& operator=(const MySql&)=delete;
+    MySql& operator=(const MySql&&)=delete;
     inline uint32_t Connect(string remote,string usrname,string passwd,string db_name);
 
 
