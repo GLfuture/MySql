@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -O3 -DNDEBUG -shared -Wl,-soname,libMySql.so -o ../lib/libMySql.so CMakeFiles/MySql.dir/MySql.cc.o 
