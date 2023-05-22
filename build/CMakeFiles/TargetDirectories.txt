@@ -1,0 +1,6 @@
+/home/gong/projects/Mysql/build/CMakeFiles/test.dir
+/home/gong/projects/Mysql/build/CMakeFiles/edit_cache.dir
+/home/gong/projects/Mysql/build/CMakeFiles/rebuild_cache.dir
+/home/gong/projects/Mysql/build/src/CMakeFiles/MySql.dir
+/home/gong/projects/Mysql/build/src/CMakeFiles/edit_cache.dir
+/home/gong/projects/Mysql/build/src/CMakeFiles/rebuild_cache.dir

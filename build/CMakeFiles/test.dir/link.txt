@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -rdynamic CMakeFiles/test.dir/main.cc.o -o test  -Wl,-rpath,/home/gong/projects/Mysql/build/lib lib/libMySql.so -lmysqlclient 
