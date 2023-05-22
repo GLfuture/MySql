@@ -3,7 +3,7 @@
 int main()
 {
     MySql mysql;
-    int ret = mysql.Connect("127.0.0.1","user1","123456","test");
+    int ret = mysql.Connect("127.0.0.1","user1","123456","test",3306);
     mysql.Create_Table("manager",MySql::Arg_List("name","age"),MySql::Arg_List("varchar(10) primary key","tinyint"));
     mysql.Insert("user",MySql::Arg_List("name","age"),MySql::Arg_List("'zhang'","10"));
     vector<vector<string>> res=mysql.Select("*","user");

@@ -36,7 +36,7 @@ public:
     MySql& operator=(const MySql&)=delete;
     MySql& operator=(const MySql&&)=delete;
     
-    uint32_t Connect(string remote,string usrname,string passwd,string db_name);
+    uint32_t Connect(string remote,string usrname,string passwd,string db_name,int32_t port);
 
     uint32_t Create_Table(string tb_name,vector<string>&& words,vector<string>&& types);
 

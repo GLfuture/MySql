@@ -11,9 +11,9 @@ MySql::MySql()
     mysql_options(&this->handle,MYSQL_SET_CHARSET_NAME,"utf8mb4");
 }
 
-uint32_t MySql::Connect(string remote, string usrname, string passwd, string db_name)
+uint32_t MySql::Connect(string remote, string usrname, string passwd, string db_name,int32_t port)
 {
-    if (!mysql_real_connect(&this->handle, remote.c_str(), usrname.c_str(), passwd.c_str(), db_name.c_str(), 3306, NULL, 0))
+    if (!mysql_real_connect(&this->handle, remote.c_str(), usrname.c_str(), passwd.c_str(), db_name.c_str(), port, NULL, 0))
     {
         return mysql_errno(&this->handle);
     }
