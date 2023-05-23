@@ -247,3 +247,37 @@ string MySql::All_Context(vector<string> &args)
     }
     return res;
 }
+
+bool MySql::StartTransaction()
+{
+    mysql_ping(&this->handle);
+
+    if(mysql_real_query(&this->handle,"start transaction;",18))
+    {
+        log_err("start transaction"<<mysql_error(&this->handle));
+        return false;
+    }
+    return true;
+}
+
+bool MySql::Commit()
+{
+    mysql_ping(&this->handle);
+    if(mysql_real_query(&this->handle,"commit;",7))
+    {
+        log_err("commit"<<mysql_error(&this->handle));
+        return false;
+    }
+    return true;
+}
+
+bool MySql::Rollback()
+{
+    mysql_ping(&this->handle);
+    if(mysql_real_query(&this->handle,"rollback;",9))
+    {
+        log_err("rollback"<<mysql_error(&this->handle));
+        return false;
+    }
+    return true;
+}

@@ -13,7 +13,7 @@
 #define log_err(x) std::cout<<x<<std::endl
 #define OK 1
 #define EMPTY 0
-#define ERROR -1
+#define ERROR 2
 using std::string;
 using std::vector;
 using std::span;
@@ -59,6 +59,14 @@ public:
     uint32_t Delete(string tb_name,string condition);
 
     uint32_t Alter(string tb_name,Alter_Type type,string condition);
+
+    // 开启事务
+	bool StartTransaction();
+	// 提交事务
+	bool Commit();
+	// 回滚事务
+	bool Rollback();
+
 
     template<typename ...Str>
     static inline vector<string> Arg_List(Str...colmuns){
