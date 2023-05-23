@@ -9,10 +9,16 @@
 #include<typeinfo>
 #include<cxxabi.h>
 #include<exception>
+
+#define log_err(x) std::cout<<x<<std::endl
+#define OK 1
+#define EMPTY 0
+#define ERROR -1
 using std::string;
 using std::vector;
 using std::span;
 using namespace abi;
+
 #endif
 class Type_Exception:public std::exception{
 public:
@@ -63,7 +69,7 @@ public:
             ans=res;
         }
         catch(Type_Exception* &e){
-            std::cout<<e->what()<<std::endl;
+            log_err(e->what());
             delete e;
         }
         return ans;

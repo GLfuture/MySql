@@ -15,15 +15,19 @@ uint32_t MySql::Connect(string remote, string usrname, string passwd, string db_
 {
     if (!mysql_real_connect(&this->handle, remote.c_str(), usrname.c_str(), passwd.c_str(), db_name.c_str(), port, NULL, 0))
     {
+        log_err(mysql_error(&this->handle));
         return mysql_errno(&this->handle);
     }
-    return 0;
+    return OK;
 }
 
 uint32_t MySql::Create_Table(string tb_name,vector<string>&& words,vector<string>&& types)
 {
     if(tb_name.empty()||(words.size()!=types.size()))
-        return 0;
+    {
+        log_err("create error");
+        return ERROR;
+    }    
     mysql_ping(&this->handle);
     string query="CREATE TABLE IF NOT EXISTS " + tb_name+"(";
     vector<string> contexts;
@@ -35,17 +39,28 @@ uint32_t MySql::Create_Table(string tb_name,vector<string>&& words,vector<string
     query = query + res + ");";
     Cmd_Add(query);
     int ret = mysql_real_query(&this->handle,query.c_str(),query.size());
-    return ret;
+    if(ret){
+        log_err(mysql_error(&this->handle));
+        return mysql_errno(&this->handle);
+    }
+    return OK;
 }
 
 uint32_t MySql::Drop_Table(string tb_name)
 {
-    if(tb_name.empty())
-        return 0;
+    if(tb_name.empty()){
+        log_err("drop empty");
+        return EMPTY;
+    }
+    
     mysql_ping(&this->handle);
     string query="DROP TABLE IF EXISTS "+tb_name+";";
     Cmd_Add(query);
     int ret=mysql_real_query(&this->handle,query.c_str(),query.size());
+    if(ret){
+        log_err(mysql_error(&this->handle));
+        return mysql_errno(&this->handle);
+    }
     return ret;
 }
 
@@ -53,7 +68,11 @@ vector<vector<string>> MySql::Select(string field, string table, string conditio
 {
     vector<vector<string>> results;
     if(field.empty()||table.empty()||condition.empty())
+    {
+        log_err("select empty");
         return results;
+    }
+        
     mysql_ping(&this->handle);
     // res.assign(0,"");
     string query = "SELECT " + field + " FROM " + table;
@@ -65,7 +84,10 @@ vector<vector<string>> MySql::Select(string field, string table, string conditio
     Cmd_Add(query); // 加入历史命令
     int ret = mysql_real_query(&this->handle, query.c_str(),query.size());
     if (ret)
+    {
+        log_err(mysql_error(&this->handle));
         return results;
+    }
     MYSQL_RES *m_res = mysql_store_result(&this->handle);
     MYSQL_FIELD *fd; // 列名
     vector<string> names;
@@ -99,20 +121,30 @@ vector<vector<string>> MySql::Select(string field, string table, string conditio
 uint32_t MySql::Insert(string table, vector<string> &&columns, vector<string> &&values)
 {
     if (columns.empty() || values.empty())
-        return 0;
+    {
+        log_err("insert empty");
+        return EMPTY;
+    }
     mysql_ping(&this->handle);
     string col = All_Context(columns);
     string val = All_Context(values);
     string query = "INSERT INTO " + table + "(" + col + ") values (" + val + ");";
     Cmd_Add(query);
     int ret = mysql_real_query(&this->handle, query.c_str(),query.size());
-    return ret;
+    if(ret){
+        log_err(mysql_error(&this->handle));
+        return mysql_errno(&this->handle);
+    }
+    return OK;
 }
 
 uint32_t MySql::Update(string table, vector<string> &&columns, vector<string> &&values, string condition)
 {
     if (columns.size() != values.size())
-        return 0;
+    {
+        log_err("update error");
+        return ERROR;
+    }
     mysql_ping(&this->handle);
     string query = "UPDATE " + table + " SET ";
     int n = columns.size();
@@ -126,24 +158,39 @@ uint32_t MySql::Update(string table, vector<string> &&columns, vector<string> &&
     query = query + " WHERE " + condition + ";";
     Cmd_Add(query);
     int ret = mysql_real_query(&this->handle, query.c_str(),query.size());
-    return ret;
+    if(ret){
+        log_err(mysql_error(&this->handle));
+        return mysql_errno(&this->handle);
+    }
+    return OK;
 }
 
 uint32_t MySql::Delete(string table, string condition)
 {
     if(table.empty()||condition.empty())
-        return 0;
+    {
+        log_err("delete empty");
+        return EMPTY;
+    }
+        
     mysql_ping(&this->handle);
     string query = "DELETE FROM " + table + " WHERE " + condition + ";";
     Cmd_Add(query);
     int ret = mysql_real_query(&this->handle, query.c_str(),query.size());
-    return ret;
+    if(ret){
+        log_err(mysql_error(&this->handle));
+        return mysql_errno(&this->handle);
+    }
+    return OK;
 }
 
 uint32_t MySql::Alter(string tb_name,Alter_Type type,string condition)
 {
     if(tb_name.empty()||condition.empty())
-        return 0;
+    {
+        log_err("alter empty");
+        return EMPTY;
+    }
     mysql_ping(&this->handle);
     string query="ALTER TABLE "+tb_name+" ";
     switch(type)
@@ -160,7 +207,11 @@ uint32_t MySql::Alter(string tb_name,Alter_Type type,string condition)
     };
     Cmd_Add(query);
     int ret=mysql_real_query(&this->handle,query.c_str(),query.size());
-    return ret;
+    if(ret){
+        log_err(mysql_error(&this->handle));
+        return mysql_errno(&this->handle);
+    }
+    return OK;
 }
 
 void MySql::History(int num)
