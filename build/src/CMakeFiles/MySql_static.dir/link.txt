@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/gong/projects/Mysql/lib/libMySql_static.a CMakeFiles/MySql_static.dir/MySql.cc.o
-/usr/bin/ranlib /home/gong/projects/Mysql/lib/libMySql_static.a

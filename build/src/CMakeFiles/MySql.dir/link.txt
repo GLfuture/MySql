@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -g -shared -Wl,-soname,libMySql.so -o /home/gong/projects/Mysql/lib/libMySql.so CMakeFiles/MySql.dir/MySql.cc.o 

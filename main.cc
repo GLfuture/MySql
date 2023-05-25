@@ -1,6 +1,6 @@
 #include"MySql.h"
 #include<fstream>
-int read_image(string filename,char*buffer,int len)
+char* read_image(string filename)
 {
     std::ifstream in(filename.c_str(),std::ios::binary);
     if(!in.is_open()){
@@ -10,10 +10,12 @@ int read_image(string filename,char*buffer,int len)
     in.seekg(0,in.end);
     int total_len=in.tellg();
     in.seekg(0,in.beg);
+    char *buffer=new char[total_len];
+    memset(buffer,0,sizeof(buffer));
     in.read(buffer,total_len);
     //std::cout<<in.gcount()<<"\n";
     in.close();
-    return total_len;
+    return buffer;
 }
 
 void write_image(string filename,char*buffer,int len)
@@ -42,13 +44,12 @@ int main()
     //mysql.Alter("",MySql::ADD,"");
     //mysql.Delete("","");
     //插入图片
-    char *buffer=new char[40000];
-    memset(buffer,0,40000);
-    int len = read_image("/home/gong/projects/MySql/src/a.jpg",buffer,40000);
-    std::cout<<"file size:"<<len<<"\n";
+    char *buffer = read_image("a.jpg");
+    //std::cout<<"file size:"<<len<<"\n";
+    int len=sizeof(buffer);
     mysql.Param_Send_Binary(mysql.Insert_Query("manager",MySql::Arg_List("name","image"),MySql::Arg_List("'gong'","?")),buffer,len);
     mysql.Param_Recv_Binary(mysql.Select_Query("image","manager","name='gong'"),buffer,len);
-    write_image("/home/gong/projects/MySql/src/b.jpg",buffer,len);
+    write_image("b.jpg",buffer,len);
     mysql.History();
     // for(auto &s:res){
     //     for(auto &v:s){
