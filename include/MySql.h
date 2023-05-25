@@ -9,10 +9,11 @@
 #include<typeinfo>
 #include<cxxabi.h>
 #include<exception>
+#include<string.h>
 
 #define log_err(x) std::cout<<x<<std::endl
-#define OK 1
-#define EMPTY 0
+#define OK 0
+#define EMPTY 1
 #define ERROR 2
 using std::string;
 using std::vector;
@@ -35,37 +36,56 @@ public:
         DROP,
         CHANGE,
     };
-
     MySql();
     MySql(const MySql&) = delete;
     MySql(MySql&&)=delete;
     MySql& operator=(const MySql&)=delete;
     MySql& operator=(const MySql&&)=delete;
+
+    string Create_Query(string tb_name,vector<string>&& words,vector<string>&& types);
+
+    string Drop_Query(string tb_name);
+
+    string Select_Query(string field,string table,string condition="NULL");
+
+    string Insert_Query(string tb_name,vector<string> &&columns , vector<string> &&values);
+
+    string Update_Query(string tb_name,vector<string> &&columns,vector<string> &&values,string condition);
+
+    string Delete_Query(string tb_name,string condition);
+    
+    string Alter_Query(string tb_name,Alter_Type type,string condition);
+
     
     uint32_t Connect(string remote,string usrname,string passwd,string db_name,int32_t port);
 
-    uint32_t Create_Table(string tb_name,vector<string>&& words,vector<string>&& types);
+    uint32_t Create_Table(string query);
 
-    uint32_t Drop_Table(string tb_name);
+    uint32_t Drop_Table(string query);
 
     //inline uint32_t Create_DB(string db_name);
 
-    vector<vector<string>> Select(string field,string table,string condition="NULL");
+    vector<vector<string>> Select(string query);
 
-    uint32_t Insert(string tb_name,vector<string> &&columns , vector<string> &&values);
+    uint32_t Insert(string query);
 
-    uint32_t Update(string tb_name,vector<string> &&columns,vector<string> &&values,string condition);
+    uint32_t Update(string query);
 
-    uint32_t Delete(string tb_name,string condition);
+    uint32_t Delete(string query);
 
-    uint32_t Alter(string tb_name,Alter_Type type,string condition);
-
+    uint32_t Alter(string query);
+    //发送二进制数据
+    uint32_t Param_Send_Binary(string param_query,const char* buffer,int32_t len);
+    //接收二进制数据
+    uint32_t Param_Recv_Binary(string param_query,char *&buffer,int32_t len);
     // 开启事务
 	bool StartTransaction();
 	// 提交事务
 	bool Commit();
 	// 回滚事务
 	bool Rollback();
+    
+    
 
 
     template<typename ...Str>
@@ -83,16 +103,15 @@ public:
         return ans;
     }
 
-
     void  History(int num=0);
 
     ~MySql(){
-        mysql_close(&this->handle);//关闭数据库连接
+        mysql_close(this->handle);//关闭数据库连接
     }
 
 private:
     
-    string  All_Context(vector<string>& args);
+    string Comma_Compose(vector<string>& args);
     
     static inline void arg_sub(vector<string>& sub){
     }
@@ -128,6 +147,6 @@ private:
         cmd_history.push_back(cmd);
     }
 
-    MYSQL handle;//mysql连接句柄结构体
+    MYSQL* handle;//mysql连接句柄结构体
     vector<string> cmd_history;//历史mysql查询语句
 };
