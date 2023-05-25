@@ -11,4 +11,5 @@ mkdir build
 cd build
 
 cmake ..
-
+### 注意事项
+可执行文件在build目录下，注意文件的相对路径
