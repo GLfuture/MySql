@@ -34,7 +34,25 @@ string Drop_Query(string tb_name)
 参数为需要删除的表名
 ```
 ```c++
-string Select_Query(string field,string table,string condition="NULL");
-filed为列名
+string Select_Query(vector<string>&& field,string table,string condition="NULL")
+filed为列名，可以通过Arg_List生成，table是表名，condition是条件，默认为NULL
 ```
+```c++
+string Insert_Query(string tb_name,vector<string> &&fields , vector<string> &&values);
+tb_name为表名，fields为列名，values为值
+```
+```c++
+string Update_Query(string tb_name,vector<string> &&fields,vector<string> &&values,string condition);
+tb_name为表名，fields为列名，values为值,condition为条件
+```
+```c++
+string Delete_Query(string tb_name,string condition);
+tb_name为表名，condition为条件
+```
+```c++
+string Alter_Query(string tb_name,Alter_Type type,string condition);
+tb_name为表名，type为Alter的操作，condition为条件
+```
+#### 功能接口
+参数为query，使用对应的query方法生成
 
