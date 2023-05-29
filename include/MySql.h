@@ -48,7 +48,7 @@ public:
 
     string Select_Query(vector<string>&& field,string table,string condition="NULL");
 
-    string Insert_Query(string tb_name,vector<string> &&columns , vector<string> &&values);
+    string Insert_Query(string tb_name,vector<string> &&fields , vector<string> &&values);
 
     string Update_Query(string tb_name,vector<string> &&columns,vector<string> &&values,string condition);
 
