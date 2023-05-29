@@ -50,7 +50,7 @@ public:
 
     string Insert_Query(string tb_name,vector<string> &&fields , vector<string> &&values);
 
-    string Update_Query(string tb_name,vector<string> &&columns,vector<string> &&values,string condition);
+    string Update_Query(string tb_name,vector<string> &&fields,vector<string> &&values,string condition);
 
     string Delete_Query(string tb_name,string condition);
     
