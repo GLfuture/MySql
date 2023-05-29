@@ -34,7 +34,7 @@ int main()
     //mysql.Update(mysql.Update_Query("manager",MySql::Arg_List("age"),MySql::Arg_List("30"),"name='zhang'"));
     //mysql.Insert(mysql.Insert_Query("manager",MySql::Arg_List("name","age"),MySql::Arg_List("'li'","10")));
     //mysql.Delete(mysql.Delete_Query("manager","name='li'"));
-    //vector<vector<string>> res=mysql.Select("*","manager");
+    vector<vector<string>> res=mysql.Select(mysql.Select_Query(MySql::Arg_List("name","age"),"manager"));
     //mysql.Alter(mysql.Alter_Query("manager",MySql::ADD,"image LONGBLOB"));
     //mysql.Alter(mysql.Alter_Query("manager",MySql::CHANGE,"address address varchar(10)"));
    // mysql.Alter("manager",MySql::DROP,"address");
@@ -44,18 +44,18 @@ int main()
     //mysql.Alter("",MySql::ADD,"");
     //mysql.Delete("","");
     //插入图片
-    char *buffer = read_image("a.jpg");
+    // char *buffer = read_image("a.jpg");
     //std::cout<<"file size:"<<len<<"\n";
-    int len=sizeof(buffer);
-    mysql.Param_Send_Binary(mysql.Insert_Query("manager",MySql::Arg_List("name","image"),MySql::Arg_List("'gong'","?")),buffer,len);
-    mysql.Param_Recv_Binary(mysql.Select_Query("image","manager","name='gong'"),buffer,len);
-    write_image("b.jpg",buffer,len);
+    // int len=sizeof(buffer);
+    // mysql.Param_Send_Binary(mysql.Insert_Query("manager",MySql::Arg_List("name","image"),MySql::Arg_List("'gong'","?")),buffer,len);
+    // mysql.Param_Recv_Binary(mysql.Select_Query(MySql::Arg_List("image"),"manager","name='gong'"),buffer,len);
+    // write_image("b.jpg",buffer,len);
     mysql.History();
-    // for(auto &s:res){
-    //     for(auto &v:s){
-    //         std::cout<<v<<" ";
-    //     }
-    //     std::cout<<std::endl;
-    // }
+    for(auto &s:res){
+        for(auto &v:s){
+            std::cout<<v<<" ";
+        }
+        std::cout<<std::endl;
+    }
     return 0;
 }

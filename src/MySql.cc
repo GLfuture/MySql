@@ -36,14 +36,22 @@ string MySql::Drop_Query(string tb_name)
     return "DROP TABLE IF EXISTS "+tb_name+";";
 }
 
-string MySql::Select_Query(string field,string table,string condition)
+string MySql::Select_Query(vector<string>&& field,string table,string condition)
 {
     if(field.empty()||table.empty()||condition.empty())
     {
         log_err("select empty");
         return "";
     }
-    string query = "SELECT " + field + " FROM " + table;
+    string query = "SELECT " ;
+    for(int i=0;i<field.size();i++)
+    {
+        query+=field[i];
+        if(i!=field.size()-1){
+            query+=",";
+        }
+    }
+    query = query + " FROM " + table;
     if (condition != "NULL")
     {
         query += " WHERE " + condition;

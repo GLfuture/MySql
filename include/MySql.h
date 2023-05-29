@@ -46,7 +46,7 @@ public:
 
     string Drop_Query(string tb_name);
 
-    string Select_Query(string field,string table,string condition="NULL");
+    string Select_Query(vector<string>&& field,string table,string condition="NULL");
 
     string Insert_Query(string tb_name,vector<string> &&columns , vector<string> &&values);
 
